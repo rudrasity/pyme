@@ -1,0 +1,446 @@
+Here's a revised plan with more challenging exercises for each of the 20 days:
+
+### **Day 1: Introduction to Python**
+
+**Exercise:**
+- **Create a program that asks for a number and checks if it's prime.**
+
+**Solution:**
+```python
+def is_prime(n):
+    if n <= 1:
+        return False
+    for i in range(2, int(n**0.5) + 1):
+        if n % i == 0:
+            return False
+    return True
+
+num = int(input("Enter a number: "))
+if is_prime(num):
+    print(f"{num} is prime.")
+else:
+    print(f"{num} is not prime.")
+```
+
+### **Day 2: Variables and Data Structures**
+
+**Exercise:**
+- **Write a function to reverse a list in-place without using Python's built-in reverse method.**
+
+**Solution:**
+```python
+def reverse_list_in_place(lst):
+    left, right = 0, len(lst) - 1
+    while left < right:
+        lst[left], lst[right] = lst[right], lst[left]
+        left += 1
+        right -= 1
+    return lst
+
+my_list = [1, 2, 3, 4, 5]
+print(reverse_list_in_place(my_list))  # Should print [5, 4, 3, 2, 1]
+```
+
+### **Day 3: Control Flow**
+
+**Exercise:**
+- **Implement a function that returns the Fibonacci number at a given position using recursion.**
+
+**Solution:**
+```python
+def fibonacci(n):
+    if n <= 0:
+        return "Input should be a positive integer"
+    elif n == 1:
+        return 0
+    elif n == 2:
+        return 1
+    else:
+        return fibonacci(n-1) + fibonacci(n-2)
+
+print(fibonacci(10))
+```
+
+### **Day 4: Loops**
+
+**Exercise:**
+- **Write a program to find and print all prime numbers within a given range using the Sieve of Eratosthenes.**
+
+**Solution:**
+```python
+def sieve_of_eratosthenes(n):
+    # Boolean array "prime[0..n]" and initialize all entries it as true
+    prime = [True for _ in range(n+1)]
+    p = 2
+    while (p * p <= n):
+        if (prime[p] == True):
+            # Update all multiples of p
+            for i in range(p * p, n+1, p):
+                prime[i] = False
+        p += 1
+    # Print all prime numbers
+    for p in range(2, n):
+        if prime[p]:
+            print(p)
+
+sieve_of_eratosthenes(30)
+```
+
+### **Day 5: Functions**
+
+**Exercise:**
+- **Create a decorator that times how long a function takes to execute.**
+
+**Solution:**
+```python
+import time
+
+def timer_decorator(func):
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        print(f"{func.__name__} took {end_time - start_time:.4f} seconds to run.")
+        return result
+    return wrapper
+
+@timer_decorator
+def slow_function():
+    time.sleep(2)
+    return "Done"
+
+print(slow_function())
+```
+
+### **Day 6: Dictionaries and Sets**
+
+**Exercise:**
+- **Implement a function to find the common elements in two dictionaries based on keys and values.**
+
+**Solution:**
+```python
+def common_elements(dict1, dict2):
+    return {k: dict1[k] for k in dict1 if k in dict2 and dict1[k] == dict2[k]}
+
+dict1 = {'a': 1, 'b': 2, 'c': 3}
+dict2 = {'b': 2, 'c': 4, 'd': 5}
+print(common_elements(dict1, dict2))
+```
+
+### **Day 7: Modules and Packages**
+
+**Exercise:**
+- **Write a script that uses the `random` module to generate a 4x4 matrix of random integers between 0 and 10, then calculate the sum of all elements.**
+
+**Solution:**
+```python
+import random
+
+matrix = [[random.randint(0, 10) for _ in range(4)] for _ in range(4)]
+sum_all = sum(sum(row) for row in matrix)
+print(matrix)
+print(f"Sum of all elements: {sum_all}")
+```
+
+### **Day 8: File I/O**
+
+**Exercise:**
+- **Create a program that reads a text file, counts word frequency, and writes the results to another file sorted by frequency.**
+
+**Solution:**
+```python
+from collections import Counter
+
+with open('input.txt', 'r') as file:
+    words = file.read().lower().split()
+
+word_count = Counter(words)
+
+with open('output.txt', 'w') as file:
+    for word, count in sorted(word_count.items(), key=lambda x: x[1], reverse=True):
+        file.write(f"{word}: {count}\n")
+```
+
+### **Day 9: Error Handling**
+
+**Exercise:**
+- **Implement a function to safely divide two numbers with custom exceptions for division by zero or invalid input.**
+
+**Solution:**
+```python
+class DivisionError(Exception):
+    pass
+
+class InvalidInputError(Exception):
+    pass
+
+def safe_division(a, b):
+    try:
+        if not (isinstance(a, (int, float)) and isinstance(b, (int, float))):
+            raise InvalidInputError("Inputs must be numbers")
+        if b == 0:
+            raise DivisionError("Cannot divide by zero")
+        return a / b
+    except InvalidInputError as e:
+        print(e)
+    except DivisionError as e:
+        print(e)
+
+print(safe_division(10, 2))
+print(safe_division(10, 0))
+print(safe_division("10", 2))
+```
+
+### **Day 10: Classes and Objects**
+
+**Exercise:**
+- **Design a class `BankAccount` with methods for deposit, withdrawal, and checking balance, ensuring balance cannot go negative.**
+
+**Solution:**
+```python
+class BankAccount:
+    def __init__(self, initial_balance=0):
+        self._balance = initial_balance
+
+    def deposit(self, amount):
+        if amount > 0:
+            self._balance += amount
+            return True
+        return False
+
+    def withdraw(self, amount):
+        if amount > 0 and self._balance >= amount:
+            self._balance -= amount
+            return True
+        return False
+
+    def check_balance(self):
+        return self._balance
+
+account = BankAccount(100)
+print(account.check_balance())  # 100
+account.deposit(50)
+print(account.check_balance())  # 150
+account.withdraw(200)  # False
+print(account.check_balance())  # Still 150
+```
+
+### **Day 11: More on OOP**
+
+**Exercise:**
+- **Create an inheritance example where you have a `Vehicle` base class and `Car` and `Motorcycle` subclasses with specific attributes.**
+
+**Solution:**
+```python
+class Vehicle:
+    def __init__(self, make, model):
+        self.make = make
+        self.model = model
+
+    def display_info(self):
+        return f"{self.make} {self.model}"
+
+class Car(Vehicle):
+    def __init__(self, make, model, doors):
+        super().__init__(make, model)
+        self.doors = doors
+
+    def display_info(self):
+        return f"{super().display_info()} with {self.doors} doors"
+
+class Motorcycle(Vehicle):
+    def __init__(self, make, model, has_sidecar):
+        super().__init__(make, model)
+        self.has_sidecar = has_sidecar
+
+    def display_info(self):
+        return f"{super().display_info()} {'with sidecar' if self.has_sidecar else 'without sidecar'}"
+
+car = Car("Toyota", "Corolla", 4)
+motorcycle = Motorcycle("Honda", "CBR500R", False)
+
+print(car.display_info())
+print(motorcycle.display_info())
+```
+
+### **Day 12: Introduction to NumPy**
+
+**Exercise:**
+- **Generate a 5x5 matrix of random numbers between 0 and 1, then find the maximum value and its index.**
+
+**Solution:**
+```python
+import numpy as np
+
+matrix = np.random.rand(5, 5)
+max_value = np.max(matrix)
+max_index = np.unravel_index(np.argmax(matrix), matrix.shape)
+print("Matrix:\n", matrix)
+print(f"Max value: {max_value}, at index {max_index}")
+```
+
+### **Day 13: NumPy Array Manipulation**
+
+**Exercise:**
+- **Create two 2D arrays, stack them vertically, then find the mean of each column in the result.**
+
+**Solution:**
+```python
+import numpy as np
+
+arr1 = np.array([[1, 2], [3, 4]])
+arr2 = np.array([[5, 6], [7, 8]])
+
+stacked = np.vstack((arr1, arr2))
+column_means = np.mean(stacked, axis=0)
+print("Stacked array:\n", stacked)
+print("Mean of each column:\n", column_means)
+```
+
+### **Day 14: NumPy Functions**
+
+**Exercise:**
+- **Using NumPy, write a function to perform element-wise multiplication of two lists and then compute the standard deviation of the result.**
+
+**Solution:**
+```python
+import numpy as np
+
+def multiply_and_std(list1, list2):
+    result = np.multiply(list1, list2)
+    return np.std(result)
+
+list1 = [1, 2, 3, 4]
+list2 = [4, 3, 2, 1]
+print(multiply_and_std(list1, list2))
+```
+
+### **Day 15: NumPy for Data Analysis**
+
+**Exercise:**
+- **Load a CSV file into NumPy, then perform operations like finding outliers (using IQR method), normalizing the data, and calculating correlation between columns.**
+
+**Solution:**
+```python
+import numpy as np
+
+# Assume 'data.csv' has numeric data
+data = np.genfromtxt('data.csv', delimiter=',')
+
+def find_outliers(data):
+    Q1 = np.percentile(data, 25, axis=0)
+    Q3 = np.percentile(data, 75, axis=0)
+    IQR = Q3 - Q1
+    lower_bound = Q1 - 1.5 * IQR
+    upper_bound = Q3 + 1.5 * IQR
+    return np.any((data < lower_bound) | (data > upper_bound), axis=1)
+
+outliers = find_outliers(data)
+print(f"Outlier rows: {np.where(outliers)[0]}")
+
+# Normalization
+normalized_data = (data - np.mean(data, axis=0)) / np.std(data, axis=0)
+print("Normalized data:\n", normalized_data)
+
+# Correlation
+correlation_matrix = np.corrcoef(data.T)  # Transpose to get correlation of columns
+print("Correlation matrix:\n", correlation_matrix)
+```
+
+### **Day 16: Project - Calculator**
+
+**Exercise:**
+- **Implement an advanced calculator with memory functions (like M+, M-, MR, MC), trigonometric functions, and handling of complex numbers.**
+
+**Solution:** ([*Omitted for brevity, but you can expand on the basic calculator with additional functionalities.*])
+
+### **Day 17: Project - Data Analysis with NumPy**
+
+**Exercise:**
+- **Perform a full analysis of a dataset including data cleaning (removing NaN values), statistical summaries, and visualization using Matplotlib for histograms and scatter plots.**
+
+**Solution:** ([*This would involve using both NumPy for data manipulation and Matplotlib for plotting. Here's a conceptual solution:*])
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Assume 'data.csv' is your dataset
+data = np.genfromtxt('data.csv', delimiter=',', filling_values=np.nan)
+
+# Remove NaN values
+clean_data = data[~np.isnan(data).any(axis=1)]
+
+# Statistical summaries
+mean = np.mean(clean_data, axis=0)
+median = np.median(clean_data, axis=0)
+std_dev = np.std(clean_data, axis=0)
+
+print(f"Mean: {mean}")
+print(f"Median: {median}")
+print(f"Standard Deviation: {std_dev}")
+
+# Histogram for column 0
+plt.hist(clean_data[:, 0], bins=30)
+plt.title('Histogram of Column 0')
+plt.show()
+
+# Scatter plot for columns 0 and 1
+plt.scatter(clean_data[:, 0], clean_data[:, 1])
+plt.xlabel('Column 0')
+plt.ylabel('Column 1')
+plt.title('Scatter Plot of Column 0 vs Column 1')
+plt.show()
+```
+
+### **Day 18: Project - Game Development**
+
+**Exercise:**
+- **Create a text-based game where players can move around in a grid, collect items, and solve puzzles to progress. Use classes for game elements and handle player input.**
+
+**Solution:** ([*Omitted for brevity, but this would involve creating classes for players, items, grid, etc., and managing game logic with loops and conditional statements.*])
+
+### **Day 19: Project - Image Processing with NumPy**
+
+**Exercise:**
+- **Write a program to apply filters (like Gaussian blur or edge detection) to an image using NumPy and display the results.**
+
+**Solution:** 
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import ndimage
+
+# Load an image (you can use scipy.misc.face() for testing or read your image)
+img = plt.imread('your_image.jpg')[:, :, :3]  # Ensure RGB image
+
+# Gaussian blur
+blurred = ndimage.gaussian_filter(img, sigma=3)
+
+# Edge detection using Sobel filter
+sobel_x = ndimage.sobel(img, axis=0)
+sobel_y = ndimage.sobel(img, axis=1)
+edge_detected = np.hypot(sobel_x, sobel_y)
+
+# Display results
+fig, ax = plt.subplots(1, 3, figsize=(15, 5))
+ax[0].imshow(img)
+ax[0].set_title('Original Image')
+ax[1].imshow(blurred)
+ax[1].set_title('Gaussian Blur')
+ax[2].imshow(edge_detected, cmap='gray')
+ax[2].set_title('Edge Detection')
+plt.show()
+```
+
+### **Day 20: Review and Consolidation**
+
+**Exercise:**
+- **Create a mini-project that integrates all learned concepts. For example, a simple data dashboard that loads data, performs analysis, visualizes results, and allows user interaction for queries.**
+
+**Solution:** ([*This would be a comprehensive project combining Python basics, NumPy operations, and possibly other libraries like Matplotlib for visualization. Here's a high-level approach:*])
+- Use Python for setting up the interface and user interaction.
+- NumPy for data manipulation and analysis.
+- Matplotlib for plotting data visualizations.
+- Implement a loop where users can select options to view different analyses or data visualizations.
+
+Remember, these exercises are designed to be more challenging, so you might need extra time or research for some concepts. Always test your code thoroughly, and don't hesitate to expand on these ideas or adjust them for your learning pace or specific interests.
